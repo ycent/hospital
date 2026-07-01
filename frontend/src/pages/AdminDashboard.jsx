@@ -62,22 +62,22 @@ const AdminDashboard = () => {
 
             {/* Metrics */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="card p-6 flex items-center space-x-4 border-slate-100/50">
+                <div className="card p-6 flex items-center space-x-4 border-slate-200/60 bg-white/80">
                     <div className="p-3.5 bg-brand-50 text-brand-600 rounded-2xl shadow-sm border border-brand-100">
                         <Stethoscope className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Active Specialists</p>
-                        <p className="text-2xl font-extrabold text-slate-900">{doctors.length}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Active Specialists</p>
+                        <p className="text-2xl font-extrabold text-slate-900 mt-0.5">{doctors.length}</p>
                     </div>
                 </div>
-                <div className="card p-6 flex items-center space-x-4 border-slate-100/50">
+                <div className="card p-6 flex items-center space-x-4 border-slate-200/60 bg-white/80">
                     <div className="p-3.5 bg-indigo-50 text-indigo-600 rounded-2xl shadow-sm border border-indigo-100">
                         <UserRound className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Bookings</p>
-                        <p className="text-2xl font-extrabold text-slate-900">{appointments.length}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Bookings</p>
+                        <p className="text-2xl font-extrabold text-slate-900 mt-0.5">{appointments.length}</p>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
             {/* Content Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Manage Doctors */}
-                <div className="card p-6 border-slate-100/50 bg-white/80">
+                <div className="card p-6 border-slate-200/60 bg-white/80">
                     <h2 className="text-lg font-bold text-slate-900 mb-5 flex items-center border-b border-slate-100 pb-3">
                         <Stethoscope className="w-5 h-5 mr-2 text-brand-500" /> Manage Doctors
                     </h2>
@@ -160,7 +160,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* View All Appointments */}
-                <div className="card p-6 border-slate-100/50 bg-white/80">
+                <div className="card p-6 border-slate-200/60 bg-white/80">
                     <h2 className="text-lg font-bold text-slate-900 mb-5 border-b border-slate-100 pb-3">
                         All System Appointments
                     </h2>

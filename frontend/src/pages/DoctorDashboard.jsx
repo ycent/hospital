@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { Calendar, CheckCircle, XCircle, Users, Activity, Clock } from 'lucide-react';
+import { Calendar, CheckCircle, XCircle, Users, Activity, Clock, ShieldCheck, Star } from 'lucide-react';
 
 const DoctorDashboard = () => {
     const [appointments, setAppointments] = useState([]);
@@ -43,13 +43,13 @@ const DoctorDashboard = () => {
     const completed = appointments.filter(a => a.status === 'Completed');
 
     const renderTable = (list, showActions) => (
-        <div className="card border-slate-100 overflow-hidden shadow-md shadow-brand-500/5 bg-white/80">
+        <div className="card border-slate-200/60 overflow-hidden shadow-sm bg-white/80">
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-slate-100">
                     <thead className="bg-slate-50/70">
                         <tr>
                             <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Patient Name</th>
-                            <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Schedule Details</th>
+                            <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Date & Time</th>
                             <th className="px-6 py-4 text-left text-xs font-bold text-slate-400 uppercase tracking-wider">Current Status</th>
                             {showActions && <th className="px-6 py-4 text-right text-xs font-bold text-slate-400 uppercase tracking-wider">Console Actions</th>}
                         </tr>
@@ -91,7 +91,7 @@ const DoctorDashboard = () => {
                         {list.length === 0 && (
                             <tr>
                                 <td colSpan={showActions ? "4" : "3"} className="px-6 py-10 text-center text-slate-400 text-sm font-medium">
-                                    No appointments scheduled in this section.
+                                    No appointments registered in this section.
                                 </td>
                             </tr>
                         )}
@@ -105,37 +105,37 @@ const DoctorDashboard = () => {
         <div className="space-y-8 animate-fade-in-up">
             {/* Title Section */}
             <div>
-                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Doctor Console</h1>
-                <p className="text-slate-500 text-sm">Review your custom clinic timeline, patients, and visit states.</p>
+                <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Clinician Console</h1>
+                <p className="text-slate-500 text-sm">Review your custom checkups schedule and manage patient treatment logs.</p>
             </div>
 
             {/* Metrics cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="card p-6 flex items-center space-x-4 border-slate-100/50">
+                <div className="card p-6 flex items-center space-x-4 border-slate-200/60 bg-white/80">
                     <div className="p-3.5 bg-blue-50 text-blue-600 rounded-2xl shadow-sm border border-blue-100">
                         <Clock className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Pending Visits</p>
-                        <p className="text-2xl font-extrabold text-slate-900">{scheduled.length}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Pending Checkups</p>
+                        <p className="text-2xl font-extrabold text-slate-900 mt-0.5">{scheduled.length}</p>
                     </div>
                 </div>
-                <div className="card p-6 flex items-center space-x-4 border-slate-100/50">
+                <div className="card p-6 flex items-center space-x-4 border-slate-200/60 bg-white/80">
                     <div className="p-3.5 bg-teal-50 text-teal-600 rounded-2xl shadow-sm border border-teal-100">
                         <CheckCircle className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Completed Treatments</p>
-                        <p className="text-2xl font-extrabold text-slate-900">{completed.length}</p>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Completed Sessions</p>
+                        <p className="text-2xl font-extrabold text-slate-900 mt-0.5">{completed.length}</p>
                     </div>
                 </div>
-                <div className="card p-6 flex items-center space-x-4 border-slate-100/50">
-                    <div className="p-3.5 bg-brand-50 text-brand-600 rounded-2xl shadow-sm border border-brand-100">
+                <div className="card p-6 flex items-center space-x-4 border-slate-200/60 bg-white/80">
+                    <div className="p-3.5 bg-indigo-50 text-indigo-600 rounded-2xl shadow-sm border border-indigo-100">
                         <Users className="w-6 h-6" />
                     </div>
                     <div>
-                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Patients</p>
-                        <p className="text-2xl font-extrabold text-slate-900">
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-bold">Assigned Patients</p>
+                        <p className="text-2xl font-extrabold text-slate-900 mt-0.5">
                             {new Set(appointments.map(a => a.patient_name)).size}
                         </p>
                     </div>
@@ -145,7 +145,7 @@ const DoctorDashboard = () => {
             {/* Upcoming Appointments Table */}
             <div className="space-y-4">
                 <h2 className="text-lg font-bold text-slate-900 flex items-center">
-                    <Calendar className="w-5 h-5 mr-2 text-brand-500" /> Action Required
+                    <Calendar className="w-5 h-5 mr-2 text-brand-500" /> Pending Approvals
                 </h2>
                 {renderTable(scheduled, true)}
             </div>
@@ -153,7 +153,7 @@ const DoctorDashboard = () => {
             {/* Past/Cancelled Table */}
             <div className="space-y-4 pt-4">
                 <h2 className="text-lg font-bold text-slate-400 flex items-center">
-                    <Activity className="w-5 h-5 mr-2 text-slate-400" /> Historic logs
+                    <Activity className="w-5 h-5 mr-2 text-slate-400" /> Historic Logs
                 </h2>
                 {renderTable(past, false)}
             </div>

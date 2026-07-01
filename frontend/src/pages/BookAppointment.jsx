@@ -1,29 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../services/api';
 import { User, Calendar, Clock, ArrowLeft, HeartPulse, ShieldAlert, Award } from 'lucide-react';
 
 const BookAppointment = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
+    
     const [doctors, setDoctors] = useState([]);
     const [doctorId, setDoctorId] = useState('');
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDoctors = async () => {
             try {
                 const { data } = await api.get('/doctors');
                 setDoctors(data);
-                if (data.length > 0) setDoctorId(data[0].doctor_id);
+                
+                // If a doctor ID was passed in navigation state, pre-select it
+                const passedId = location.state?.doctorId;
+                if (passedId && data.some(d => d.doctor_id === Number(passedId))) {
+                    setDoctorId(passedId);
+                } else if (data.length > 0) {
+                    setDoctorId(data[0].doctor_id);
+                }
             } catch (err) {
-                setError('Failed to load specialists list.');
+                setError('Failed to load specialists roster.');
             }
         };
         fetchDoctors();
-    }, []);
+    }, [location.state]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -62,7 +71,7 @@ const BookAppointment = () => {
 
             {/* Split Grid */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
-                {/* Column 1: Clinic Rules/Info (2 cols) */}
+                {/* Column 1: Info (2 cols) */}
                 <div className="md:col-span-2 space-y-6">
                     <div className="card p-6 bg-gradient-to-br from-brand-900 to-brand-950 text-white border-brand-950 shadow-md">
                         <div className="bg-brand-500/20 p-3 rounded-2xl w-fit mb-5">
@@ -97,7 +106,7 @@ const BookAppointment = () => {
                 {/* Column 2: Booking Form (3 cols) */}
                 <div className="md:col-span-3 card p-8 border-slate-100 shadow-lg shadow-brand-500/5 bg-white/80">
                     {error && (
-                        <div className="bg-rose-50 border border-rose-200/50 text-rose-600 px-4 py-3 rounded-xl text-sm mb-6 font-medium">
+                        <div className="bg-rose-50 border border-rose-200/50 text-rose-600 px-4 py-3.5 rounded-xl text-sm mb-6 font-semibold">
                             {error}
                         </div>
                     )}
