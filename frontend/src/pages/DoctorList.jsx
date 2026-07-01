@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../services/api';
-import { User, Shield } from 'lucide-react';
+import { User, ShieldCheck, Mail, ArrowLeft } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const DoctorList = () => {
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchDoctors = async () => {
@@ -20,33 +22,59 @@ const DoctorList = () => {
         fetchDoctors();
     }, []);
 
-    if (loading) return <div className="text-center py-10">Loading...</div>;
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center min-h-[50vh]">
+                <div className="animate-spin rounded-full h-10 w-10 border-4 border-brand-500 border-t-transparent"></div>
+            </div>
+        );
+    }
 
     return (
-        <div>
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">Our Specialists</h1>
-                <p className="text-gray-500 mt-1">Browse our list of available doctors.</p>
+        <div className="space-y-8 animate-fade-in-up">
+            {/* Header */}
+            <div className="flex items-center space-x-3">
+                <button 
+                    onClick={() => navigate(-1)} 
+                    className="p-2 hover:bg-slate-100 rounded-xl text-slate-500 hover:text-slate-700 transition-colors"
+                >
+                    <ArrowLeft className="w-5 h-5" />
+                </button>
+                <div>
+                    <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">Our Specialists</h1>
+                    <p className="text-slate-500 text-sm">Browse our list of certified clinic doctors and specialists.</p>
+                </div>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {/* Doctors Grid */}
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                 {doctors.map(doc => (
-                    <div key={doc.doctor_id} className="card p-6 flex flex-col items-center text-center hover:shadow-md transition-all duration-300 hover:-translate-y-1">
-                        <div className="w-20 h-20 bg-brand-50 rounded-full flex items-center justify-center mb-4 border-4 border-brand-100">
-                            <User className="h-10 w-10 text-brand-600" />
+                    <div key={doc.doctor_id} className="card-interactive p-6 flex flex-col items-center text-center relative overflow-hidden bg-white/80 border-slate-100/50">
+                        {/* Diagonal Accent Stripe */}
+                        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-brand-500 to-teal-400"></div>
+
+                        <div className="w-20 h-20 bg-gradient-to-tr from-brand-50 to-brand-100/60 rounded-3xl flex items-center justify-center mb-5 border border-brand-100 shadow-inner text-brand-600">
+                            <User className="h-10 w-10" />
                         </div>
-                        <h3 className="font-bold text-gray-900 text-lg">{doc.name}</h3>
-                        <p className="text-brand-600 font-medium text-sm mb-3 flex items-center justify-center">
-                            <Shield className="w-3 h-3 mr-1" /> {doc.specialization}
-                        </p>
-                        <p className="text-gray-500 text-xs mt-auto line-clamp-2">
-                            Dedicated to providing excellent patient care and medical services.
-                        </p>
+                        
+                        <h3 className="font-extrabold text-slate-800 text-lg mb-1">Dr. {doc.name}</h3>
+                        
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-brand-500/10 text-brand-600 border border-brand-500/10 mb-4">
+                            <ShieldCheck className="w-3.5 h-3.5 mr-1" /> {doc.specialization}
+                        </span>
+
+                        <div className="w-full border-t border-slate-100/80 pt-4 mt-auto flex items-center justify-center text-slate-400 hover:text-slate-600 transition-colors">
+                            <Mail className="w-4 h-4 mr-2" />
+                            <span className="text-xs font-bold truncate max-w-[180px]">{doc.email}</span>
+                        </div>
                     </div>
                 ))}
+                
                 {doctors.length === 0 && (
-                    <div className="col-span-full py-12 text-center text-gray-500 bg-gray-50 rounded-xl border border-dashed border-gray-300">
-                        No doctors currently available in the system.
+                    <div className="col-span-full py-16 text-center card border-dashed border-2 border-slate-200 bg-white/40 flex flex-col items-center justify-center">
+                        <User className="h-12 w-12 text-slate-300 mb-4 animate-pulse-slow" />
+                        <h3 className="text-base font-bold text-slate-700">No doctors currently registered</h3>
+                        <p className="text-xs text-slate-500 mt-1">Please log in as an administrator to add doctors to the database.</p>
                     </div>
                 )}
             </div>
